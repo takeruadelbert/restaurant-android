@@ -9,6 +9,8 @@ import com.example.stn_com_01.orderfoodapp.Model.User;
 public class Common {
     public static User username;
     public static final String DELETE = "Delete";
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
 
     public static boolean isConnectedToInternet(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

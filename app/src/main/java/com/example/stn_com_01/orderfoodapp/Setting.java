@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.example.stn_com_01.orderfoodapp.Common.GlobalVariable;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import io.paperdb.Paper;
+
 public class Setting extends AppCompatActivity {
     private EditText ip_address;
     private RadioGroup print_setting;
@@ -29,6 +31,8 @@ public class Setting extends AppCompatActivity {
         print_setting = (RadioGroup) findViewById(R.id.radioPrintSetting);
         save = (Button) findViewById(R.id.btnSave);
         back = (Button) findViewById(R.id.btnBack);
+
+        Paper.init(this);
 
         // set field 'IP Address Server' input if it has been input by user previously.
         final GlobalVariable globalVariable = (GlobalVariable) getApplicationContext();
@@ -102,6 +106,10 @@ public class Setting extends AppCompatActivity {
 
             // set Print Type after submit order
             globalVariable.set_type_print(print_type);
+
+            // write settings to memory
+            Paper.book().write("ip_address_server", ip_address);
+            Paper.book().write("print_type", String.valueOf(print_type));
 
             return true;
         } catch(Exception e) {

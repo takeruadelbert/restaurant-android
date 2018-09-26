@@ -29,6 +29,8 @@ import com.example.stn_com_01.orderfoodapp.ViewHolder.CategoryAdapter;
 
 import java.util.ArrayList;
 
+import io.paperdb.Paper;
+
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CategoryListener {
 
@@ -133,6 +135,9 @@ public class Home extends AppCompatActivity
             Intent order = new Intent(Home.this, OrderStatus.class);
             startActivity(order);
         } else if (id == R.id.nav_log_out) {
+            // remove username and password which are stored in memory
+            Paper.book().destroy();
+
             Intent back_to_main = new Intent(Home.this, MainActivity.class);
             back_to_main.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(back_to_main);

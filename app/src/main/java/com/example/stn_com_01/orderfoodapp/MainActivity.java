@@ -12,6 +12,8 @@ import android.widget.Toolbar;
 
 import com.example.stn_com_01.orderfoodapp.Common.GlobalVariable;
 
+import io.paperdb.Paper;
+
 public class MainActivity extends AppCompatActivity {
 
     public Button btnSignIn, btnSetting;
@@ -25,6 +27,16 @@ public class MainActivity extends AppCompatActivity {
         btnSignIn = (Button) findViewById(R.id.btnSignIn);
         btnSetting = (Button) findViewById(R.id.btnSetting);
         txtSlogan = (TextView) findViewById(R.id.txtSlogan);
+
+        // set IP Address Server and Print Type Setting if they're stored in memory
+        Paper.init(this);
+        String ip_address_server = Paper.book().read("ip_address_server");
+        String print_type = Paper.book().read("print_type");
+        if( (ip_address_server != null && !ip_address_server.isEmpty()) && (print_type != null && !print_type.isEmpty()) ) {
+            final GlobalVariable globalVariable = (GlobalVariable) getApplicationContext();
+            globalVariable.set_ip_address_server(ip_address_server);
+            globalVariable.set_type_print(Integer.parseInt(print_type));
+        }
 
         // set font to NABILA.TTF
         Typeface font = Typeface.createFromAsset(getAssets(), "fonts/NABILA.TTF");
