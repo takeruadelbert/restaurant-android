@@ -109,15 +109,20 @@ public class Cart extends AppCompatActivity {
                 Request request = new Request(no_table.getText().toString(), txtTotalPrice.getText().toString(), cart);
 
                 // submit the order request to PHP Server
+                final GlobalVariable globalVariable = (GlobalVariable) getApplicationContext();
+                String print_type = String.valueOf(globalVariable.get_type_print());
+
                 dataOrder.put("no_table", no_table.getText().toString());
                 dataOrder.put("total", total_amount);
                 dataOrder.put("account_id", Common.username.getAccount_id());
+                dataOrder.put("print_type", print_type);
+
                 JSONArray detail_order = new JSONArray(dataOrderDetail);
                 System.out.println("Data Order Detail = " + detail_order);
                 dataOrder.put("detail", detail_order.toString());
                 JSONObject jsonObject = get_request_data();
                 PostDataOrder post = new PostDataOrder(Cart.this);
-                final GlobalVariable globalVariable = (GlobalVariable) getApplicationContext();
+
                 String ip_address_server = globalVariable.get_ip_address_server();
                 String url = "http://" + ip_address_server + "/restaurant/post-data-order";
                 System.out.println("sent data = " + jsonObject.toString());

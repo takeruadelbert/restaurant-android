@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.example.stn_com_01.orderfoodapp.Database.Database;
+
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
@@ -114,6 +116,10 @@ public class PostDataOrder extends AsyncTask<String, Void, Void> {
         String message;
         if(this.get_http_status() == 200) {
             message = "Order Submitted!";
+
+            // remove orders from cart when it's successfully submitted to server
+            Database db = new Database(this.context);
+            db.cleanCart();
         } else {
             message = this.get_http_message();
         }
