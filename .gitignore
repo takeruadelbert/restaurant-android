@@ -2,6 +2,7 @@
 .gradle
 /local.properties
 /.idea
+.idea/caches/build_file_checksums.ser
 .DS_Store
 /build
 /captures
