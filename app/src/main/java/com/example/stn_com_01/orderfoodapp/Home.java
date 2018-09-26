@@ -104,16 +104,17 @@ public class Home extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
+        if(item.getItemId() == R.id.refresh) {
+            recycler_menu = (RecyclerView)findViewById(R.id.recycler_menu);
+            recycler_menu.setHasFixedSize(true);
+            layoutManager = new LinearLayoutManager(this);
+            recycler_menu.setLayoutManager(layoutManager);
+            if(Common.isConnectedToInternet(this)) {
+                recycler_menu.setAdapter(new CategoryAdapter(this, loadMenu()));
+            } else {
+                Toast.makeText(Home.this, "Please check your connection!!", Toast.LENGTH_SHORT).show();
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 
