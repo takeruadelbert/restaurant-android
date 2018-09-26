@@ -4,9 +4,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.example.stn_com_01.orderfoodapp.API.RequestData;
 import com.example.stn_com_01.orderfoodapp.API.RequestDataFoodList;
+import com.example.stn_com_01.orderfoodapp.Common.Common;
 import com.example.stn_com_01.orderfoodapp.Common.GlobalVariable;
 import com.example.stn_com_01.orderfoodapp.Interface.FoodListener;
 import com.example.stn_com_01.orderfoodapp.Model.Food;
@@ -41,7 +43,12 @@ public class FoodList extends AppCompatActivity implements FoodListener{
             menu_category_id = Integer.parseInt(getIntent().getStringExtra("menu_category_id"));
         }
         if(menu_category_id != -1) {
-            recyclerView.setAdapter(new FoodListAdapter(this, loadListFood(menu_category_id)));
+            if(Common.isConnectedToInternet(this)) {
+                recyclerView.setAdapter(new FoodListAdapter(this, loadListFood(menu_category_id)));
+            } else {
+                Toast.makeText(FoodList.this, "Please check your connection!!", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
     }
 

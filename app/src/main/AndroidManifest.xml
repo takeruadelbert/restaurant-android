@@ -3,6 +3,7 @@
     package="com.example.stn_com_01.orderfoodapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".Common.GlobalVariable"

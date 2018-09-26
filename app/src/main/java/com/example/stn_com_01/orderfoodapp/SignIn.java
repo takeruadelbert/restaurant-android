@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.stn_com_01.orderfoodapp.Common.Common;
 import com.example.stn_com_01.orderfoodapp.Common.GlobalVariable;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -27,19 +29,24 @@ public class  SignIn extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                ProgressDialog mDialog = new ProgressDialog(SignIn.this);
-                mDialog.setMessage("Connecting...");
-                mDialog.show();
+                if(Common.isConnectedToInternet(getBaseContext())) {
+                    ProgressDialog mDialog = new ProgressDialog(SignIn.this);
+                    mDialog.setMessage("Connecting...");
+                    mDialog.show();
 
-                final GlobalVariable globalVariable = (GlobalVariable) getApplicationContext();
-                String ip_address_server = globalVariable.get_ip_address_server();
+                    final GlobalVariable globalVariable = (GlobalVariable) getApplicationContext();
+                    String ip_address_server = globalVariable.get_ip_address_server();
 
-                String url_server = "http://" + ip_address_server + "/restaurant/android-login";
-                String username = edtUsername.getText().toString();
-                String password = edtPassword.getText().toString();
+                    String url_server = "http://" + ip_address_server + "/restaurant/android-login";
+                    String username = edtUsername.getText().toString();
+                    String password = edtPassword.getText().toString();
 
-                PostData post = new PostData(mDialog, SignIn.this, SignIn.this);
-                post.execute(url_server, username, password);
+                    PostData post = new PostData(mDialog, SignIn.this, SignIn.this);
+                    post.execute(url_server, username, password);
+                } else {
+                    Toast.makeText(SignIn.this, "Please check your connection!!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
         });
     }

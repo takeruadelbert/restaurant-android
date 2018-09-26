@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.example.stn_com_01.orderfoodapp.Common.Common;
 import com.example.stn_com_01.orderfoodapp.Database.Database;
 import com.example.stn_com_01.orderfoodapp.Helper.Helper;
 import com.example.stn_com_01.orderfoodapp.Model.Food;
@@ -74,7 +75,12 @@ public class FoodDetail extends AppCompatActivity {
         });
 
         if(success) {
-            this.set_detail_food(name, image_path, description, price);
+            if(Common.isConnectedToInternet(this)) {
+                this.set_detail_food(name, image_path, description, price);
+            } else {
+                Toast.makeText(FoodDetail.this, "Please check your connection!!", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
     }
 

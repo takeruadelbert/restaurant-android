@@ -77,7 +77,12 @@ public class Home extends AppCompatActivity
         recycler_menu.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recycler_menu.setLayoutManager(layoutManager);
-        recycler_menu.setAdapter(new CategoryAdapter(this, loadMenu()));
+        if(Common.isConnectedToInternet(this)) {
+            recycler_menu.setAdapter(new CategoryAdapter(this, loadMenu()));
+        } else {
+            Toast.makeText(Home.this, "Please check your connection!!", Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
     @Override
