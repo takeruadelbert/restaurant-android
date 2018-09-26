@@ -35,6 +35,8 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     // add some libraries
+    compile 'io.paperdb:paperdb:2.1'
+    compile 'com.github.rey5137:material:1.2.4'
     compile 'info.hoang8f:fbutton:1.0.5'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'com.android.support:cardview-v7:27.1.1'
