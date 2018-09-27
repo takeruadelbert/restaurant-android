@@ -138,7 +138,9 @@ public class FoodList extends AppCompatActivity implements FoodListener, FoodByN
         RequestDataFoodByName req = new RequestDataFoodByName(this);
         final GlobalVariable globalVariable = (GlobalVariable) getApplicationContext();
         String ip_address_server = globalVariable.get_ip_address_server();
-        String url = "http://" + ip_address_server + "/restaurant/get-menu-by-name?menu_name=" + text;
+        String menu_name = text.replace(" ", "-");
+        String url = "http://" + ip_address_server + "/restaurant/get-menu-by-name?menu_name=" + menu_name;
+        System.out.println("URL = " + url);
         req.execute(url, ip_address_server);
         return req.get_foods();
     }
