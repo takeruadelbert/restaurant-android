@@ -29,8 +29,15 @@ public class FoodList extends AppCompatActivity implements FoodListener, FoodByN
     List<String> suggestList = new ArrayList<>();
     MaterialSearchBar materialSearchBar;
 
-    //int menu_category_id;
+    int menu_category_id;
 
+    public void setMenu_category_id(int menu_category_id) {
+        this.menu_category_id = menu_category_id;
+    }
+
+    public int getMenu_category_id() {
+        return this.menu_category_id;
+    }
 
     // FoodByNameListener Interface
     @Override
@@ -72,7 +79,7 @@ public class FoodList extends AppCompatActivity implements FoodListener, FoodByN
             @Override
             public void onSearchStateChanged(boolean b) {
                 if(!b) {
-//                    recyclerView.setAdapter(recyclerView.getAdapter());
+                    recyclerView.setAdapter(recyclerView.getAdapter());
                 }
             }
 
@@ -101,7 +108,7 @@ public class FoodList extends AppCompatActivity implements FoodListener, FoodByN
         recyclerView.setLayoutManager(layoutManager);
 
         // get Intent from Home
-        int menu_category_id = -1;
+        this.setMenu_category_id(-1);
         if(getIntent() != null) {
             menu_category_id = Integer.parseInt(getIntent().getStringExtra("menu_category_id"));
         }
@@ -115,7 +122,7 @@ public class FoodList extends AppCompatActivity implements FoodListener, FoodByN
         }
 
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
-        materialSearchBar.setHint("Enter Menu ...");
+        materialSearchBar.setHint("Enter Menu ...");materialSearchBar.setPlaceHolder("Search Menu Here ...");
     }
 
     private ArrayList loadListFood(int menu_category_id) {
@@ -128,7 +135,6 @@ public class FoodList extends AppCompatActivity implements FoodListener, FoodByN
     }
 
     private ArrayList<Food> startSearch(String text) {
-        System.out.println("Char Sequence = " + text);
         RequestDataFoodByName req = new RequestDataFoodByName(this);
         final GlobalVariable globalVariable = (GlobalVariable) getApplicationContext();
         String ip_address_server = globalVariable.get_ip_address_server();

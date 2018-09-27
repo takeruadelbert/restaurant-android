@@ -89,7 +89,15 @@ public class RequestDataFoodByName extends AsyncTask<String, Void, ArrayList<Foo
                 System.out.println("Response get food by name = " + response_data);
                 JSONObject obj = new JSONObject(response_data);
                 String temp = obj.get("data").toString();
-                return this.jsonToArray(temp, ip_address_server);
+
+                int status = Integer.parseInt(obj.get("status").toString());
+                this.set_http_status_code(status);
+
+                if (this.get_http_status_code() == 206) {
+                    return this.jsonToArray(temp, ip_address_server);
+                } else {
+                    return this.foods;
+                }
             } else {
                 System.out.println("Error HTTP Status Code = " + resposeCode);
             }
@@ -108,7 +116,7 @@ public class RequestDataFoodByName extends AsyncTask<String, Void, ArrayList<Foo
     @Override
     protected void onPostExecute(ArrayList<Food> foods) {
         super.onPostExecute(foods);
-        if (foodByNameListener != null) {
+        if (foodByNameListener != null && this.get_http_status_code() == 206) {
             foodByNameListener.onComplete(foods, foods.get(0).get_name());
         }
     }
