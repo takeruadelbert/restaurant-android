@@ -6,7 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".FoodList">
 
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        android:id="@+id/searchBar"
+        android:layout_alignParentTop="true"
+        app:mt_speechMode="false"
+        app:mt_hint="Enter Menu ..."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></com.mancj.materialsearchbar.MaterialSearchBar>
+
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/searchBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recyler_food"

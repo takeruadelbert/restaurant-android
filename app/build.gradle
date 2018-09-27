@@ -35,6 +35,7 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     // add some libraries
+    compile 'com.github.mancj:MaterialSearchBar:0.7.1'
     compile 'io.paperdb:paperdb:2.1'
     compile 'com.github.rey5137:material:1.2.4'
     compile 'info.hoang8f:fbutton:1.0.5'

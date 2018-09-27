@@ -2,6 +2,7 @@ package com.example.stn_com_01.orderfoodapp.API;
 
 import android.os.AsyncTask;
 
+import com.example.stn_com_01.orderfoodapp.Interface.FoodByNameListener;
 import com.example.stn_com_01.orderfoodapp.Interface.FoodListener;
 import com.example.stn_com_01.orderfoodapp.Model.Category;
 import com.example.stn_com_01.orderfoodapp.Model.Food;
@@ -20,20 +21,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RequestDataFoodList extends AsyncTask<String, Void, ArrayList<Food>> {
+public class RequestDataFoodByName extends AsyncTask<String, Void, ArrayList<Food>> {
     private int http_status_code;
     private String http_message;
     private final int read_time_out = 20000; // 20 seconds
     private final int connection_time_out = 20000; // 20 seconds
     private ArrayList<Food> foods;
-    private FoodListener foodListener;
+    private FoodByNameListener foodByNameListener;
 
-    private List<String> foodList;
-
-    public RequestDataFoodList(FoodListener foodListener) {
+    public RequestDataFoodByName(FoodByNameListener foodByNameListener) {
         this.foods = new ArrayList<>();
-        this.foodListener = foodListener;
-        this.foodList = new ArrayList<>();
+        this.foodByNameListener = foodByNameListener;
     }
 
     public int get_http_status_code() {
@@ -52,14 +50,14 @@ public class RequestDataFoodList extends AsyncTask<String, Void, ArrayList<Food>
         this.http_message = http_message;
     }
 
-    public ArrayList get_foods() {
+    public ArrayList<Food> get_foods() {
         return this.foods;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        System.out.println("Requesting Data Food to Server ...");
+        System.out.println("Requesting Data Food By Name to Server ...");
     }
 
     @Override
@@ -79,15 +77,16 @@ public class RequestDataFoodList extends AsyncTask<String, Void, ArrayList<Food>
             urlConnection.connect();
 
             int resposeCode = urlConnection.getResponseCode();
-            if(resposeCode == HttpURLConnection.HTTP_OK) {
+            if (resposeCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line;
-                while((line = br.readLine()) != null) {
+                while ((line = br.readLine()) != null) {
                     sb.append(line);
                 }
                 br.close();
                 String response_data = sb.toString();
+                System.out.println("Response get food by name = " + response_data);
                 JSONObject obj = new JSONObject(response_data);
                 String temp = obj.get("data").toString();
                 return this.jsonToArray(temp, ip_address_server);
@@ -109,51 +108,44 @@ public class RequestDataFoodList extends AsyncTask<String, Void, ArrayList<Food>
     @Override
     protected void onPostExecute(ArrayList<Food> foods) {
         super.onPostExecute(foods);
-        if(foodListener != null) {
-            foodListener.onComplete(foods, this.foodList);
+        if (foodByNameListener != null) {
+            foodByNameListener.onComplete(foods, foods.get(0).get_name());
         }
     }
 
-    private ArrayList<Food> jsonToArray(String jsonString, String ip_address_server) throws JSONException{
-        JSONArray jsonArray = new JSONArray(jsonString);
+    private ArrayList<Food> jsonToArray(String jsonString, String ip_address_server) throws JSONException {
         Food food;
-        for(int i = 0; i < jsonArray.length(); i++) {
-            String value = jsonArray.getString(i);
-            JSONObject temp = new JSONObject(value);
-            String model = temp.get("RestoMenu").toString();
-            JSONObject temp2 = new JSONObject(model);
+        JSONObject temp = new JSONObject(jsonString);
+        String model = temp.get("RestoMenu").toString();
+        JSONObject temp2 = new JSONObject(model);
 
-            // get the Resto Menu ID
-            int category_id = Integer.parseInt(temp2.get("id").toString());
+        // get the Resto Menu ID
+        int category_id = Integer.parseInt(temp2.get("id").toString());
 
-            // get the Resto Menu Name
-            String category_name = temp2.get("name").toString();
-
-            // add Menu Name to foodList ArrayList
-            this.foodList.add(category_name);
+        // get the Resto Menu Name
+        String category_name = temp2.get("name").toString();
 
             /*
                 get the Resto Menu Preview Image URL,
                 and append it with Protocol and Server Domain/IP Address
               */
-            String url = "http://" + ip_address_server + "/restaurant";
-            String image_path = temp2.get("image_path").toString();
-            String replaced_image_path = image_path.replaceAll("\\/", "/");
-            replaced_image_path = replaced_image_path.replaceAll("\\\\", "/");
-            String full_image_path = url + replaced_image_path;
+        String url = "http://" + ip_address_server + "/restaurant";
+        String image_path = temp2.get("image_path").toString();
+        String replaced_image_path = image_path.replaceAll("\\/", "/");
+        replaced_image_path = replaced_image_path.replaceAll("\\\\", "/");
+        String full_image_path = url + replaced_image_path;
 
-            // get the description
-            String description = temp2.get("description").toString();
+        // get the description
+        String description = temp2.get("description").toString();
 
-            // get menu category id
-            int menu_category_id = Integer.parseInt(temp2.get("menu_category_id").toString());
+        // get menu category id
+        int menu_category_id = Integer.parseInt(temp2.get("menu_category_id").toString());
 
-            // get the price
-            int price = Integer.parseInt(temp2.get("price").toString());
+        // get the price
+        int price = Integer.parseInt(temp2.get("price").toString());
 
-            food = new Food(category_id, category_name, full_image_path, description, menu_category_id, price);
-            this.foods.add(food);
-        }
+        food = new Food(category_id, category_name, full_image_path, description, menu_category_id, price);
+        this.foods.add(food);
         return this.foods;
     }
 }
