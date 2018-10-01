@@ -1,5 +1,6 @@
 package com.example.stn_com_01.orderfoodapp;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +29,8 @@ public class FoodList extends AppCompatActivity implements FoodListener, FoodByN
 
     List<String> suggestList = new ArrayList<>();
     MaterialSearchBar materialSearchBar;
+
+    SwipeRefreshLayout swipeRefreshLayout;
 
     int menu_category_id;
 
@@ -123,6 +126,15 @@ public class FoodList extends AppCompatActivity implements FoodListener, FoodByN
 
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
         materialSearchBar.setHint("Enter Menu ...");materialSearchBar.setPlaceHolder("Search Menu Here ...");
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                recyclerView.setAdapter(new FoodListAdapter(FoodList.this, loadListFood(menu_category_id)));
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private ArrayList loadListFood(int menu_category_id) {
