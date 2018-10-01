@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -37,6 +38,7 @@ public class Home extends AppCompatActivity
     TextView username;
     RecyclerView recycler_menu;
     RecyclerView.LayoutManager layoutManager;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onComplete(ArrayList<Category> categories) {
@@ -85,6 +87,16 @@ public class Home extends AppCompatActivity
             Toast.makeText(Home.this, "Please check your connection!!", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                reloadMenu();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
@@ -107,15 +119,7 @@ public class Home extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.refresh) {
-            recycler_menu = (RecyclerView)findViewById(R.id.recycler_menu);
-            recycler_menu.setHasFixedSize(true);
-            layoutManager = new LinearLayoutManager(this);
-            recycler_menu.setLayoutManager(layoutManager);
-            if(Common.isConnectedToInternet(this)) {
-                recycler_menu.setAdapter(new CategoryAdapter(this, loadMenu()));
-            } else {
-                Toast.makeText(Home.this, "Please check your connection!!", Toast.LENGTH_SHORT).show();
-            }
+            reloadMenu();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -157,5 +161,17 @@ public class Home extends AppCompatActivity
         String url = "http://" + ip_address_server + "/restaurant/get-category";
         get.execute(url, ip_address_server);
         return get.get_categories();
+    }
+
+    private void reloadMenu() {
+        recycler_menu = (RecyclerView)findViewById(R.id.recycler_menu);
+        recycler_menu.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recycler_menu.setLayoutManager(layoutManager);
+        if(Common.isConnectedToInternet(this)) {
+            recycler_menu.setAdapter(new CategoryAdapter(this, loadMenu()));
+        } else {
+            Toast.makeText(Home.this, "Please check your connection!!", Toast.LENGTH_SHORT).show();
+        }
     }
 }
