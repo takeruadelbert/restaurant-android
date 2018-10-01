@@ -25,7 +25,7 @@ import java.util.Locale;
 
 class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
 
-    public TextView txt_cart_name, txt_price;
+    public TextView txt_cart_name, txt_price, txt_note;
     public ImageView img_cart_count;
     private ItemClickListener itemClickListener;
 
@@ -35,6 +35,7 @@ class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
         txt_cart_name = (TextView) itemView.findViewById(R.id.cart_item_name);
         txt_price = (TextView) itemView.findViewById(R.id.cart_item_price);
         img_cart_count = (ImageView) itemView.findViewById(R.id.cart_item_count);
+        txt_note = (TextView) itemView.findViewById(R.id.cart_item_note);
 
         itemView.setOnCreateContextMenuListener(this);
     }
@@ -80,6 +81,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
         Helper helper = new Helper();
         holder.txt_price.setText(helper.IDR((double)price));
         holder.txt_cart_name.setText(listData.get(position).getProductName());
+        if(listData.get(position).getNote() != "" && listData.get(position).getNote() != null) {
+            holder.txt_note.setText(listData.get(position).getNote());
+        } else {
+            holder.txt_note.setVisibility(View.GONE);
+            holder.txt_note.setPadding(0,0,0,0);
+        }
     }
 
     @Override

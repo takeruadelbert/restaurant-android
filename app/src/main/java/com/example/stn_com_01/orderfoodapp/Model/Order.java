@@ -6,12 +6,22 @@ public class Order {
     private String Quantity;
     private String Price;
     private String Discount;
+    private String note;
 
-    public Order(String ProductId, String ProductName, String Quantity, String Price) {
+    public Order(String ProductId, String ProductName, String Quantity, String Price, String note) {
         this.ProductId = ProductId;
         this.ProductName = ProductName;
         this.Quantity = Quantity;
         this.Price = Price;
+        this.note = note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getNote() {
+        return this.note;
     }
 
     public String getProductId() {

@@ -87,10 +87,12 @@ public class Cart extends AppCompatActivity {
             String resto_menu_id = order.getProductId();
             String quantity = order.getQuantity();
             String amount = order.getPrice();
+            String note = order.getNote();
             Map<String, String> order_detail = new HashMap<String, String>();
             order_detail.put("resto_menu_id", resto_menu_id);
             order_detail.put("quantity", quantity);
             order_detail.put("amount", amount);
+            order_detail.put("note", note);
             this.dataOrderDetail.add(order_detail);
         }
         this.total_amount = String.valueOf(total);

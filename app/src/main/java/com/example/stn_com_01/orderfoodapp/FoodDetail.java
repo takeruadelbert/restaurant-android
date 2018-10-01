@@ -15,10 +15,12 @@ import com.example.stn_com_01.orderfoodapp.Database.Database;
 import com.example.stn_com_01.orderfoodapp.Helper.Helper;
 import com.example.stn_com_01.orderfoodapp.Model.Food;
 import com.example.stn_com_01.orderfoodapp.Model.Order;
+import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
 
 public class FoodDetail extends AppCompatActivity {
     TextView food_name, food_price, food_description;
+    MaterialEditText food_note;
     ImageView food_image;
     CollapsingToolbarLayout collapsingToolbarLayout;
     FloatingActionButton btnCart;
@@ -35,6 +37,7 @@ public class FoodDetail extends AppCompatActivity {
         food_name = (TextView) findViewById(R.id.food_name);
         food_price = (TextView) findViewById(R.id.food_price);
         food_image = (ImageView) findViewById(R.id.img_food);
+        food_note = (MaterialEditText) findViewById(R.id.food_note);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppbar);
@@ -67,7 +70,8 @@ public class FoodDetail extends AppCompatActivity {
                         String.valueOf(currentFood.get_menu_id()),
                         currentFood.get_name(),
                         numberButton.getNumber(),
-                        String.valueOf(currentFood.get_price())
+                        String.valueOf(currentFood.get_price()),
+                        food_note.getText().toString()
                 ));
 //                new Database(getBaseContext()).cleanCart();
                 Toast.makeText(FoodDetail.this, "Added to Cart", Toast.LENGTH_SHORT).show();
